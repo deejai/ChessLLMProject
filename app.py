@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory
 
 app = Flask(__name__)
+app.debug = True
 
 @app.route('/')
 def serve_index():
