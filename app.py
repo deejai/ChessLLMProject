@@ -1,8 +1,8 @@
-from flask import Flask, send_from_directory
+from flask import Flask#, send_from_directory
 
 app = Flask(__name__)
-app.debug = True
 
 @app.route('/')
 def serve_index():
-    return send_from_directory(directory='.', filename='index.html')
+    return "hi!!!"
+    # return send_from_directory(directory='.', filename='index.html')
