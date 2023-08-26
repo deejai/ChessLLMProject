@@ -1,0 +1,46 @@
+{
+  "name": "chessllmcoach",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --mode development --open --hot",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deejai/ChessLLMProject.git"
+  },
+  "keywords": [
+    "chess",
+    "coach",
+    "llm",
+    "large",
+    "language",
+    "model",
+    "stockfish",
+    "react",
+    "fullstack"
+  ],
+  "author": "Dave Ferguson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deejai/ChessLLMProject/issues"
+  },
+  "homepage": "https://github.com/deejai/ChessLLMProject#readme",
+  "dependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.3",
+    "chess.js": "^1.0.0-beta.6",
+    "html-webpack-plugin": "^5.5.3",
+    "react-chessboard": "^4.0.1",
+    "webpack": "^5.88.2"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
