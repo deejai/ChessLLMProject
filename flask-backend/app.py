@@ -1,18 +1,20 @@
-from flask import Flask
+from flask import Flask, Blueprint, render_template
 import os
 import json
 
 from database_connectors.sqlite_db import SQLiteDatabaseConnection
 
+bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 app = Flask(__name__)
+app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
 
 sqlite_db = SQLiteDatabaseConnection("db.sqlite3")
 
-@app.route('/')
+@bp.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return render_template('hello.html')
 
-@app.route('/test')
+@bp.route('/test')
 def test():
     results = sqlite_db.execute_query("SELECT * FROM table2")
 

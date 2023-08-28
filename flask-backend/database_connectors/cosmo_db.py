@@ -1,4 +1,4 @@
-from azure.cosmos import CosmosClient
+from azure.cosmos.cosmos_client import CosmosClient
 import os
 
 class CosmosDBConnection:
