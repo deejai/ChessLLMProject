@@ -1,0 +1,32 @@
+name: chess-llm-backend
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=5.1
+  - bzip2=1.0.8
+  - ca-certificates=2023.05.30
+  - click=8.0.4
+  - flask=2.2.2
+  - itsdangerous=2.0.1
+  - jinja2=3.1.2
+  - ld_impl_linux-64=2.38
+  - libffi=3.4.4
+  - libgcc-ng=11.2.0
+  - libgomp=11.2.0
+  - libstdcxx-ng=11.2.0
+  - libuuid=1.41.5
+  - markupsafe=2.1.1
+  - ncurses=6.4
+  - openssl=3.0.10
+  - pip=23.2.1
+  - python=3.11.4
+  - readline=8.2
+  - setuptools=68.0.0
+  - sqlite=3.41.2
+  - tk=8.6.12
+  - tzdata=2023c
+  - werkzeug=2.2.3
+  - wheel=0.38.4
+  - xz=5.4.2
+  - zlib=1.2.13
