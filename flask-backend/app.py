@@ -6,7 +6,6 @@ from database_connectors.sqlite_db import SQLiteDatabaseConnection
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 app = Flask(__name__)
-app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
 
 sqlite_db = SQLiteDatabaseConnection("db.sqlite3")
 
@@ -29,5 +28,8 @@ def test():
     return response
 
 if __name__ == '__main__':
+    with app.app_context():
+        app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
+
     port = int(os.getenv('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
