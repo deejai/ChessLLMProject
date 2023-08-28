@@ -12,7 +12,7 @@ bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 app = Flask(__name__)
 CORS(app, resources={r"/chess-llm-coach-api/*": {"origins": "robotchesscoach.com"}})
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 sqlite_db = SQLiteDatabaseConnection("db.sqlite3")
 
@@ -34,7 +34,7 @@ def test():
 @bp.route('/ask', methods=['POST'])
 def ask_gpt():
     user_input = request.json.get('prompt')
-    model_engine = "gpt-4.0"
+    model_engine = "gpt-4"
     conversation = [
         {"role": "user", "content": user_input}
     ]
