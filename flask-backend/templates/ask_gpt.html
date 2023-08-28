@@ -1,0 +1,27 @@
+<input type="text" id="prompt-input" placeholder="Ask GPT anything"></input>
+<button id="prompt-button">Ask</button>
+<span id="prompt-response">...</span>
+
+<script>
+  document.getElementById('prompt-button').addEventListener('click', async () => {
+    const promptInput = document.getElementById('prompt-input').value;
+    
+    try {
+      const response = await fetch('https://hogbod.dev/chess-llm-coach-api/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: promptInput }),
+      });
+
+      const jsonResponse = await response.json();
+      const responseText = jsonResponse.data.response;
+      document.getElementById('prompt-response').innerText = responseText;
+
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('prompt-response').innerText = 'An error occurred';
+    }
+  });
+</script>
