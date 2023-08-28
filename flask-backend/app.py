@@ -27,9 +27,9 @@ def test():
 
     return response
 
-if __name__ == '__main__':
-    with app.app_context():
-        app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
+with app.app_context():
+    app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
 
+if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
