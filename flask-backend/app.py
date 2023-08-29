@@ -13,8 +13,9 @@ from chess_coach.stockfish.utilities import is_valid_fen
 load_dotenv()
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
+CORS(bp, origins=["https://robotchesscoach.com"])
+
 app = Flask(__name__)
-CORS(app, resources={r"/chess-llm-coach-api/*": {"origins": "robotchesscoach.com"}})
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
