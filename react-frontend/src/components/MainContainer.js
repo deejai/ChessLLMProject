@@ -19,8 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Chessgame from './Chessgame';
+import AskCoach from './AskCoach'
 
-const drawerWidth = 240;
+const drawerWidth = 400;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -30,7 +31,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginRight: -drawerWidth,
     ...(open && {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
@@ -44,18 +44,19 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: drawerWidth,
-  }),
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['margin', 'width'], {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: drawerWidth,
+      }),
+    // zIndex: theme.zIndex.drawer + 1,
 }));
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -69,7 +70,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerRight() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -85,7 +86,7 @@ export default function PersistentDrawerRight() {
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Persistent drawer
+            Robot Chess Coach
           </Typography>
           <IconButton
             color="inherit"
@@ -103,20 +104,22 @@ export default function PersistentDrawerRight() {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'column',
             alignItems: 'center',
-            margin: 'auto',
-          }}
+            marginRight: open ? `${drawerWidth}px` : '0px', 
+        }}
         >
           <Chessgame />
+          <AskCoach />
         </Box>
       </Main>
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: '0px',
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: drawerWidth,
+            width: open ? `${drawerWidth}px` : '0px',
+            position: 'fixed',
           },
         }}
         variant="persistent"
@@ -130,29 +133,44 @@ export default function PersistentDrawerRight() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+            {[
+                ['Thing1', <InboxIcon />],
+                ['Thing2', <InboxIcon />],
+                ['Thing3', <InboxIcon />],
+                ['Thing4', <InboxIcon />],
+            ].map((tuple) => {
+                const [text, icon] = tuple;
+            return (
+                <ListItem key={text} disablePadding>
+                <ListItemButton>
+                    <ListItemIcon>
+                    {icon}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                </ListItemButton>
+                </ListItem>
+            );
+            })}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+            {[
+                ['OtherThing1', <MailIcon />],
+                ['OtherThing2', <MailIcon />],
+                ['OtherThing3', <MailIcon />],
+            ].map((tuple) => {
+                const [text, icon] = tuple;
+            return (
+                <ListItem key={text} disablePadding>
+                <ListItemButton>
+                    <ListItemIcon>
+                        {icon}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                </ListItemButton>
+                </ListItem>
+            );
+            })}
         </List>
       </Drawer>
     </Box>
