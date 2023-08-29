@@ -58,10 +58,11 @@ def ask_coach():
     print(prompt)
     print("\n<<<<<<<< END PROMPT TO GPT\n")
 
-    gpt_response = ask_gpt(prompt)
+    gpt_response: str = ask_gpt(prompt)
+    gpt_summary: str = gpt_response[gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
 
     response = app.response_class(
-        response=json.dumps({"data": {"response": gpt_response}}),
+        response=json.dumps({"data": {"response": gpt_summary}}),
         status=200,
         mimetype='application/json'
     )
@@ -72,5 +73,5 @@ with app.app_context():
     app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

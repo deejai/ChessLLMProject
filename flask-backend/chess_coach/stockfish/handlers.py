@@ -40,7 +40,6 @@ class StockfishInstance:
             return self.proc.stdout.readline().strip()
 
     def get_board_ascii(self, fen):
-
         self.send_command(f"position fen {fen}")
         self.send_command("d")
         ascii_board = []
@@ -72,15 +71,34 @@ class StockfishInstance:
         self.send_command(f"position fen {fen}")
         self.send_command(f"setoption name MultiPV value {num_moves}")
         self.send_command(f"go movetime {time_limit}")
+
         top_moves = []
         while True:
             output = self.read_output()
             if "bestmove" in output:
                 break
+
             if " pv " in output:
-                parts = output.split(" ")
-                top_moves.append(parts[-1])
-        return top_moves
+                parts = output.strip().split(" ")
+                idx = parts.index('pv')
+
+                # Capture the sequence of moves that follow the initial move
+                move_sequence = parts[idx + 1:]
+                primary_move = move_sequence[0]
+                following_moves = move_sequence[1:]
+
+                if following_moves:
+                    move_str = f"{primary_move} ({', '.join(following_moves)})"
+                else:
+                    move_str = primary_move
+
+                top_moves.append(move_str)
+
+            if len(top_moves) >= num_moves:
+                break
+
+        top_moves_str = "\n".join(top_moves)
+        return top_moves_str
 
 class StockfishPool:
     def __init__(self, size):

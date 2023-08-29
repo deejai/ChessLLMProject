@@ -28,8 +28,16 @@ const Chessgame = () => {
   }
 
   return (
-    <div>
-      <div id="Chessboard" />
+    <div style={{ textAlign: 'center' }}>
+      <div 
+        id="Chessboard"
+        style={{
+          width: '800px',
+          height: '800px',
+          margin: '0 auto',
+          border: '1px solid black'
+        }}
+      />
       <button id="chessButtonStart" onClick={startGame}>Start</button>
       <button id="chessButtonClear" onClick={clearBoard}>Clear</button>
     </div>
