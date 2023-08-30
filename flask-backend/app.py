@@ -16,6 +16,7 @@ bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 CORS(bp, origins=["https://robotchesscoach.com"])
 
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
