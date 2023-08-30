@@ -15,7 +15,7 @@ load_dotenv()
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 
 app = Flask(__name__)
-CORS(app, origins=["https://robotchesscoach.com"])
+CORS(app, origins=["http://localhost:8060", "https://robotchesscoach.com"])
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
