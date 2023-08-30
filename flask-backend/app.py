@@ -92,7 +92,7 @@ def ask_coach():
     try:
         gpt_response: str = ask_gpt(prompt)
         print(gpt_response)
-        gpt_summary: str = gpt_response[gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
+        gpt_summary: str = gpt_response[1+gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
     except Exception as e:
         print(e)
 
