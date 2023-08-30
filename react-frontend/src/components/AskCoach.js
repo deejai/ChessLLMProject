@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, CircularProgress, Box } from '@mui/material';
 
 const ChatInterface = () => {
   const [response, setResponse] = useState('');
-  const [elo, setElo] = useState(1000); // Default ELO
+  const [elo, setElo] = useState(1000);
   const [isLoading, setIsLoading] = useState(false);
+  const [taskId, setTaskId] = useState(null);
 
-  const dummyFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"; // Dummy FEN
+  const dummyFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+  const checkTaskStatus = async () => {
+    const response = await fetch(`https://hogbod.dev/chess-llm-coach-api/get-gpt-response/${taskId}`);
+    const jsonResponse = await response.json();
+    
+    if (jsonResponse.status === 'done') {
+      setResponse(jsonResponse.result);
+      setIsLoading(false);
+      setTaskId(null);
+    }
+  };
 
   const handleAskClick = async () => {
     setIsLoading(true);
@@ -26,16 +38,29 @@ const ChatInterface = () => {
         body: JSON.stringify(payload),
       });
 
-      const jsonResponse = await response.json();
-      const responseText = jsonResponse.data.response;
-      setResponse(responseText);
+      if (response.status === 202) {
+        const jsonResponse = await response.json();
+        setTaskId(jsonResponse.data.task_id);
+      }
+      
     } catch (error) {
       console.error('Error:', error);
       setResponse('An error occurred');
-    } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    let intervalId;
+    
+    if (taskId) {
+      intervalId = setInterval(() => {
+        checkTaskStatus();
+      }, 1000);
+    }
+    
+    return () => clearInterval(intervalId);
+  }, [taskId]);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
