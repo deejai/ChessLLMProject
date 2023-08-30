@@ -19,6 +19,7 @@ const ChatInterface = () => {
 
       const response = await fetch('https://hogbod.dev/chess-llm-coach-api/ask-coach', {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },

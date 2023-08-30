@@ -44,6 +44,18 @@ def ask_form():
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
+    if request.method == 'OPTIONS':
+        # Preflight request. Reply successfully:
+        resp = app.response_class(
+            response=json.dumps({"message": "OK"}),
+            status=200,
+            mimetype='application/json'
+        )
+        resp.headers.add("Access-Control-Allow-Origin", "*")
+        resp.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        resp.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
+        return resp
+
     fen = request.json.get('fen')
     elo = request.json.get('elo')
 
