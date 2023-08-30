@@ -17,7 +17,7 @@ const ChatInterface = () => {
         elo: elo,
       };
 
-      const response = await fetch('https://hogbod.dev/chess-llm-coach-api/ask', {
+      const response = await fetch('https://hogbod.dev/chess-llm-coach-api/ask-coach', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
