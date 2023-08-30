@@ -1,5 +1,4 @@
 from flask import Flask, Blueprint, render_template, request
-from flask_cors import CORS
 import os
 import json
 import openai
@@ -12,8 +11,8 @@ from chess_coach.stockfish.utilities import is_valid_fen
 
 load_dotenv()
 
+
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
-CORS(bp, origins=["http://localhost:8080", "https://robotchesscoach.com"])
 
 app = Flask(__name__)
 
@@ -22,6 +21,20 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 sqlite_db = SQLiteDatabaseConnection("db.sqlite3")
 
 sf_pool = StockfishPool(size=5)
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "https://robotchesscoach.com"]
+
+def add_cors_headers(response):
+    origin = request.headers.get('Origin')
+
+    if origin and origin in CORS_ALLOWED_ORIGINS:
+        response.headers.add("Access-Control-Allow-Origin", origin)
+
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
+    return response
+
+app.after_request(add_cors_headers)
 
 @bp.route('/')
 def hello_world():
