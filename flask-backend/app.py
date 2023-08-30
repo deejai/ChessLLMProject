@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, render_template, jsonify, request
+from flask_cors import CORS
 import os
 import json
 import openai
@@ -12,6 +13,7 @@ from chess_coach.stockfish.utilities import is_valid_fen
 load_dotenv()
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
+CORS(bp, origins=["https://robotchesscoach.com"])
 
 app = Flask(__name__)
 
@@ -42,15 +44,6 @@ def ask_form():
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
-    if request.method == 'OPTIONS':
-        response = app.response_class(
-            status=200
-        )
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
-        return response
-
     fen = request.json.get('fen')
     elo = 1000
 
@@ -74,7 +67,6 @@ def ask_coach():
         status=200,
         mimetype='application/json'
     )
-    response.headers.add("Access-Control-Allow-Origin", "*")
 
     return response
 
