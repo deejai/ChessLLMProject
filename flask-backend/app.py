@@ -87,7 +87,7 @@ def ask_coach():
     prompt = next_move_advice(sf_pool, elo, fen)
     print("\n>>>>> PROMPT TO GPT\n")
     print(prompt)
-    print("\n<<<<<<<< END PROMPT TO GPT\n")
+    print("\n<<<<<<<< END PROMPT TO GPT?\n")
 
     try:
         gpt_response: str = ask_gpt(prompt)
