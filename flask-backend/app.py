@@ -98,10 +98,6 @@ def ask_coach():
         mimetype='application/json'
     )
 
-    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
-    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
-
     return response
 
 with app.app_context():
