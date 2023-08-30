@@ -48,14 +48,7 @@ const Chessgame = () => {
     setBoard(newBoard);
   }, [game]);
 
-  const startGame = () => {
-    if (board) {
-      board.start();
-    }
-    setTurn('White');
-  };
-
-  const clearBoard = () => {
+  const resetGame = () => {
     if (board) {
       board.clear();
       setGame(new Chess());
@@ -83,11 +76,8 @@ const Chessgame = () => {
           border: '1px solid black',
         }}
       />
-      <button id="chessButtonStart" onClick={startGame}>
-        Start
-      </button>
-      <button id="chessButtonClear" onClick={clearBoard}>
-        Clear
+      <button id="chessButtonClear" onClick={resetGame} style={{ margin: '10px' }}>
+        Reset
       </button>
       <button id="chessButtonFEN" onClick={getFEN}>
         Get FEN

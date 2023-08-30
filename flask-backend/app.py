@@ -8,7 +8,7 @@ from chess_coach.stockfish.handlers import StockfishPool
 from chess_coach.gpt.api import ask_gpt
 from chess_coach.prompting.move_suggestion import next_move_advice
 from chess_coach.stockfish.utilities import is_valid_fen
-from chess_coach.gpt.queue import new_task
+from chess_coach.gpt.queue import new_task, clear_old_tasks
 from chess_coach.settings import ROOT_DIR
 import threading
 
@@ -111,6 +111,8 @@ def get_task_status(task_id):
 
 with app.app_context():
     app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')
+
+clear_old_tasks()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
