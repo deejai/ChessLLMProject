@@ -1,7 +1,5 @@
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).parent.parent.parent.resolve()
-
 def is_valid_fen(fen):
     fields = fen.strip().split(' ')
     if len(fields) != 6:

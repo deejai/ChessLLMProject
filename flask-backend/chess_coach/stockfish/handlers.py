@@ -2,7 +2,7 @@ from queue import Queue
 import subprocess
 from threading import Lock
 import os
-from chess_coach.stockfish.utilities import ROOT_DIR
+from app import ROOT_DIR
 
 class StockfishInstance:
     def __init__(self):

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, request
+from flask import Flask, Blueprint, render_template, request, jsonify
 import os
 import json
 import openai
@@ -8,9 +8,15 @@ from chess_coach.stockfish.handlers import StockfishPool
 from chess_coach.gpt.api import ask_gpt
 from chess_coach.prompting.move_suggestion import next_move_advice
 from chess_coach.stockfish.utilities import is_valid_fen
+from chess_coach.gpt.queue import new_task
+from pathlib import Path
+import threading
+
+gpt_queue_lock = threading.Lock()
+
+ROOT_DIR = Path(__file__).resolve()
 
 load_dotenv()
-
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 
@@ -51,58 +57,59 @@ def hello_world():
 def test():
     results = sqlite_db.execute_query("SELECT * FROM table2")
 
-    response = app.response_class(
-        response=json.dumps(results),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
+    return jsonify(results), 200
 
 @bp.route('/ask-form')
 def ask_form():
     return render_template('ask_gpt.html')
 
+def threaded_ask_coach(task_file_name, prompt):
+    gpt_response = ask_gpt(prompt)
+    gpt_summary = gpt_response[1 + gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
+
+    with gpt_queue_lock:
+        with open(f"tasks/{task_file_name}", "w") as f:
+            f.write(gpt_summary)
+
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
     if request.method == 'OPTIONS':
-        # Preflight request. Reply successfully:
-        response = app.response_class(
-            response=json.dumps({"message": "OK"}),
-            status=200,
-            mimetype='application/json'
-        )
-
-        return response
+        return jsonify({"message": "OK"}), 200
 
     fen = request.json.get('fen')
     elo = request.json.get('elo')
 
     if not is_valid_fen(fen):
-        return app.response_class(
-            response=json.dumps({"error": f"Invalid fen: {fen}"}),
-            status=400,
-            mimetype='application/json'
-        )
+        return jsonify({"error": f"Invalid fen: {fen}"}), 400
 
     prompt = next_move_advice(sf_pool, elo, fen)
     print("\n>>>>> PROMPT TO GPT\n")
     print(prompt)
     print("\n<<<<<<<< END PROMPT TO GPT?\n")
 
+    task_file_name = new_task()
+
+    t = threading.Thread(target=threaded_ask_coach, args=(task_file_name, prompt))
+    t.start()
+
+    return jsonify({"data": {"task_id": task_file_name}}), 202
+
+@app.route('/get-gpt-response/<task_id>', methods=['GET', 'OPTIONS'])
+def get_task_status(task_id):
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "OK"}), 200
+
     try:
-        gpt_response: str = ask_gpt(prompt)
-        print(gpt_response)
-        gpt_summary: str = gpt_response[1+gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
-    except Exception as e:
-        print(e)
+        with gpt_queue_lock:
+            with open(f"tasks/{task_id}", "r") as f:
+                result = f.read()
 
-    response = app.response_class(
-        response=json.dumps({"data": {"response": gpt_summary}}),
-        status=200,
-        mimetype='application/json'
-    )
-
-    return response
+        if not result:
+            return jsonify({'status': 'running'})
+        else:
+            return jsonify({'status': 'done', 'result': result})
+    except FileNotFoundError:
+        return jsonify({'status': 'not found'}), 404
 
 with app.app_context():
     app.register_blueprint(bp, url_prefix='/chess-llm-coach-api')

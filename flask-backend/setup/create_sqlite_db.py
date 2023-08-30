@@ -3,7 +3,7 @@ import sqlite3
 
 ROOT_DIR = Path(__file__).parent.parent
 
-conn = sqlite3.connect(ROOT_DIR / "db.sqlite3")
+conn = sqlite3.connect(ROOT_DIR / "db.sqlite")
 cursor = conn.cursor()
 
 cursor.execute("CREATE TABLE IF NOT EXISTS table1 (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER);")
