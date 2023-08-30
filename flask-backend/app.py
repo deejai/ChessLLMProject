@@ -15,14 +15,6 @@ bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
 
 app = Flask(__name__)
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
-    return response
-
-
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 sqlite_db = SQLiteDatabaseConnection("db.sqlite3")
@@ -50,7 +42,11 @@ def ask_form():
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
-    return app.response_class(response="test", status=200)
+    response =  app.response_class(response="test", status=200)
+    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+    return response
     fen = request.json.get('fen')
     elo = 1000
 
