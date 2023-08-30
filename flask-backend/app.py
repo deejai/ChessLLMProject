@@ -42,11 +42,15 @@ def ask_form():
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
-    response =  app.response_class(response="test", status=200)
-    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
-    return response
+    if request.method == 'OPTIONS':
+        response = app.response_class(
+            status=200
+        )
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        return response
+
     fen = request.json.get('fen')
     elo = 1000
 
@@ -70,6 +74,7 @@ def ask_coach():
         status=200,
         mimetype='application/json'
     )
+    response.headers.add("Access-Control-Allow-Origin", "*")
 
     return response
 
