@@ -30,7 +30,14 @@ def add_cors_headers(response):
     if origin and origin in CORS_ALLOWED_ORIGINS:
         response.headers.add("Access-Control-Allow-Origin", origin)
 
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        # Dynamically set allowed methods
+        allowed_methods = []
+        for rule in app.url_map.iter_rules():
+            if request.path == rule.rule:
+                allowed_methods.extend(rule.methods)
+
+        response.headers.add("Access-Control-Allow-Methods", ", ".join(allowed_methods))
+
     response.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
     return response
 
@@ -59,15 +66,13 @@ def ask_form():
 def ask_coach():
     if request.method == 'OPTIONS':
         # Preflight request. Reply successfully:
-        resp = app.response_class(
+        response = app.response_class(
             response=json.dumps({"message": "OK"}),
             status=200,
             mimetype='application/json'
         )
-        resp.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
-        resp.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-        resp.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
-        return resp
+
+        return response
 
     fen = request.json.get('fen')
     elo = request.json.get('elo')
