@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, jsonify, request
+from flask import Flask, Blueprint, render_template, jsonify, request,
 from flask_cors import CORS
 import os
 import json
@@ -51,7 +51,7 @@ def ask_coach():
             status=200,
             mimetype='application/json'
         )
-        resp.headers.add("Access-Control-Allow-Origin", "*")
+        resp.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
         resp.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
         resp.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
         return resp
@@ -79,6 +79,10 @@ def ask_coach():
         status=200,
         mimetype='application/json'
     )
+
+    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Authorization, Content-Type")
 
     return response
 
