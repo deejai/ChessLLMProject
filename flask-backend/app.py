@@ -1,5 +1,4 @@
 from flask import Flask, Blueprint, render_template, jsonify, request
-from flask_cors import CORS
 import os
 import json
 import openai
@@ -13,10 +12,16 @@ from chess_coach.stockfish.utilities import is_valid_fen
 load_dotenv()
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
-CORS(bp, origins=["https://robotchesscoach.com"])
 
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add("Access-Control-Allow-Origin", "https://robotchesscoach.com")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+    return response
+
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
