@@ -103,9 +103,9 @@ def get_task_status(task_id):
                 result = f.read()
 
         if not result:
-            return jsonify({'status': 'running'})
+            return jsonify({'status': 'running'}), 202
         else:
-            return jsonify({'status': 'done', 'result': result})
+            return jsonify({'status': 'done', 'result': result}), 200
     except FileNotFoundError:
         return jsonify({'status': 'not found'}), 404
 

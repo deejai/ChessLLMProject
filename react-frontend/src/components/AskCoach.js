@@ -10,25 +10,36 @@ const ChatInterface = () => {
   const dummyFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   const checkTaskStatus = async () => {
-    const response = await fetch(`https://hogbod.dev/chess-llm-coach-api/get-gpt-response/${taskId}`);
-    const jsonResponse = await response.json();
-    
-    if (jsonResponse.status === 'done') {
-      setResponse(jsonResponse.result);
+    try {
+      const response = await fetch(`https://hogbod.dev/chess-llm-coach-api/get-gpt-response/${taskId}`);
+      const jsonResponse = await response.json();
+      
+      if (response.status === 200 && jsonResponse.status === 'done') {
+        setResponse(jsonResponse.result);
+        setIsLoading(false);
+        setTaskId(null);
+      } else if (response.status === 404) {
+        setResponse('Task not found.');
+        setIsLoading(false);
+        setTaskId(null);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setResponse('An error occurred while checking task status.');
       setIsLoading(false);
       setTaskId(null);
     }
   };
-
+  
   const handleAskClick = async () => {
     setIsLoading(true);
-
+  
     try {
       const payload = {
         fen: dummyFEN,
         elo: elo,
       };
-
+  
       const response = await fetch('https://hogbod.dev/chess-llm-coach-api/ask-coach', {
         method: 'POST',
         mode: 'cors',
@@ -37,19 +48,22 @@ const ChatInterface = () => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (response.status === 202) {
         const jsonResponse = await response.json();
         setTaskId(jsonResponse.data.task_id);
+      } else {
+        setResponse('Failed to create task.');
+        setIsLoading(false);
       }
       
     } catch (error) {
       console.error('Error:', error);
-      setResponse('An error occurred');
+      setResponse('An error occurred.');
       setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     let intervalId;
     
