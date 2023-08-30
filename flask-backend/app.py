@@ -92,7 +92,7 @@ def ask_coach():
 
     return jsonify({"data": {"task_id": task_file_name}}), 202
 
-@app.route('/get-gpt-response/<task_id>', methods=['GET', 'OPTIONS'])
+@bp.route('/get-gpt-response/<task_id>', methods=['GET', 'OPTIONS'])
 def get_task_status(task_id):
     if request.method == 'OPTIONS':
         return jsonify({"message": "OK"}), 200
