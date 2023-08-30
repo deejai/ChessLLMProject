@@ -13,9 +13,9 @@ from chess_coach.stockfish.utilities import is_valid_fen
 load_dotenv()
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
+CORS(bp, origins=["http://localhost:8080", "https://robotchesscoach.com"])
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:8080", "https://robotchesscoach.com"])
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -45,7 +45,7 @@ def ask_form():
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
     fen = request.json.get('fen')
-    elo = 1000
+    elo = request.json.get('elo')
 
     if not is_valid_fen(fen):
         return app.response_class(
