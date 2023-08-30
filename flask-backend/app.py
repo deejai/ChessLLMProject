@@ -13,9 +13,9 @@ from chess_coach.stockfish.utilities import is_valid_fen
 load_dotenv()
 
 bp = Blueprint('chess-llm-coach-api', __name__, template_folder='templates')
+CORS(bp, origins=["https://robotchesscoach.com"])
 
 app = Flask(__name__)
-CORS(app, origins=["https://robotchesscoach.com"])
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -42,7 +42,7 @@ def test():
 def ask_form():
     return render_template('ask_gpt.html')
 
-@bp.route('/ask-coach', methods=['POST'])
+@bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
     fen = request.json.get('fen')
     elo = 1000
