@@ -66,7 +66,7 @@ def threaded_ask_coach(task_file_name, prompt):
     gpt_summary = gpt_response[1 + gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
 
     with gpt_queue_lock:
-        with open(f"tasks/{task_file_name}", "w") as f:
+        with open(f"workspace/gpt_queue/{task_file_name}", "w") as f:
             f.write(gpt_summary)
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
@@ -99,7 +99,7 @@ def get_task_status(task_id):
 
     try:
         with gpt_queue_lock:
-            with open(f"tasks/{task_id}", "r") as f:
+            with open(f"workspace/gpt_queue/{task_id}", "r") as f:
                 result = f.read()
 
         if not result:
