@@ -23,7 +23,7 @@ def new_task():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     file_name = f"{task_id}_{timestamp}"
 
-    with open(f"tasks/{file_name}", "w") as f:
+    with open(f"workspace/gpt_queue/{file_name}", "w") as f:
         # create empty file
         pass
 
