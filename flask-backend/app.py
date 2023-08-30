@@ -89,8 +89,8 @@ def ask_coach():
     print(prompt)
     print("\n<<<<<<<< END PROMPT TO GPT\n")
 
-    # gpt_response: str = ask_gpt(prompt)
-    gpt_summary: str = "hi"#gpt_response[gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
+    gpt_response: str = ask_gpt(prompt)
+    gpt_summary: str = gpt_response[gpt_response.find("__SUMMARY__") + len("__SUMMARY__"):].strip()
 
     response = app.response_class(
         response=json.dumps({"data": {"response": gpt_summary}}),
