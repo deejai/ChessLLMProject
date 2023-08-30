@@ -50,6 +50,7 @@ def ask_form():
 
 @bp.route('/ask-coach', methods=['POST', 'OPTIONS'])
 def ask_coach():
+    return app.response_class(response="test", status=200)
     fen = request.json.get('fen')
     elo = 1000
 
