@@ -19,6 +19,8 @@ def clear_old_tasks():
             print(f"Removed old task file: {task_file}")
 
 def new_task():
+    global task_count
+
     task_id = str(uuid4())
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     file_name = f"{task_id}_{timestamp}"
