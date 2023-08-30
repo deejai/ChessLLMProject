@@ -9,12 +9,10 @@ from chess_coach.gpt.api import ask_gpt
 from chess_coach.prompting.move_suggestion import next_move_advice
 from chess_coach.stockfish.utilities import is_valid_fen
 from chess_coach.gpt.queue import new_task
-from pathlib import Path
+from chess_coach.settings import ROOT_DIR
 import threading
 
 gpt_queue_lock = threading.Lock()
-
-ROOT_DIR = Path(__file__).resolve()
 
 load_dotenv()
 
