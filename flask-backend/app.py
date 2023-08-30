@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template
+from flask import Flask, Blueprint, render_template, request
 from flask_cors import CORS
 import os
 import json
