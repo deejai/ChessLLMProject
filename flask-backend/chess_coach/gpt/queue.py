@@ -6,7 +6,7 @@ from uuid import uuid4
 task_count = 0
 
 def clear_old_tasks():
-    task_folder = "tasks"
+    task_folder = "workspace/gpt_queue"
     now = time.mktime(datetime.now().timetuple())
     twenty_minutes_ago = now - (20 * 60)  # 20 minutes ago
 
