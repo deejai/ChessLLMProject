@@ -39,9 +39,9 @@ def next_move_advice(sf_pool: StockfishPool, player_elo: int, fen: str):
 
     ----
 
-    Think your response through step by step. Re-think it if necessary. At the end, generate a summary to provide to the player.
+    Think your response through step by step. Re-think it at least once. Once you're confident in your advice, generate a summary to provide to the player.
 
-    IMPORTANT: Prefix the summary with `__SUMMARY__:`. Do not exceed 4000 words total for your thinking plus summary.
+    IMPORTANT: Prefix the summary with `__SUMMARY__`. Do not exceed 4000 words total for your thinking plus summary. Keep the summary under ~400 words and make it pleasant to read and speak. Don't mention the player's ELO necessarily, just use it to inform your level of advice.
     """)
 
     sf_pool.release_instance(sf_instance)

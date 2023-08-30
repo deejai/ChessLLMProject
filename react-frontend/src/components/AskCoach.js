@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, CircularProgress, Box } from '@mui/material';
+import { useChess } from './ChessContext';
 
 const ChatInterface = () => {
   const [response, setResponse] = useState('');
   const [elo, setElo] = useState(1000);
   const [isLoading, setIsLoading] = useState(false);
   const [taskId, setTaskId] = useState(null);
-
-  const dummyFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const { fen } = useChess();
 
   const checkTaskStatus = async () => {
     try {
@@ -36,7 +36,7 @@ const ChatInterface = () => {
   
     try {
       const payload = {
-        fen: dummyFEN,
+        fen: fen,
         elo: elo,
       };
   
